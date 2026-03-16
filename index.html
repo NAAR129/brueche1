@@ -4,68 +4,240 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brüche addieren – Lernspiel für Kinder</title>
+
+<script>
+window.MathJax = {
+ tex: {
+  inlineMath: [['\\(','\\)'], ['$', '$']],
+  displayMath: [['\\[','\\]']]
+ },
+ svg: {
+  fontCache: 'global'
+ }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <style>
 :root {
-    --primary: #4a90e2;
-    --secondary: #50c878;
-    --accent: #ff6b35;
-    --light: #fff8e1;
-    --dark: #333;
-    --font: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+ --primary: #4a90e2;
+ --secondary: #50c878;
+ --accent: #ff6b35;
+ --light: #fff8e1;
+ --dark: #333;
+ --font: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
 }
 * {margin:0; padding:0; box-sizing:border-box;}
 body {
-    font-family: var(--font);
-    background: linear-gradient(135deg, #e0f7fa, #fff3e0);
-    color: var(--dark);
-    line-height: 1.6;
-    padding:10px;
-    min-height:100vh;
+ font-family: var(--font);
+ background: linear-gradient(135deg, #e0f7fa, #fff3e0);
+ color: var(--dark);
+ line-height: 1.6;
+ padding:10px;
+ min-height:100vh;
 }
-header {text-align:center; background:var(--primary); color:white; padding:25px 20px; border-radius:15px; margin-bottom:20px; box-shadow:0 6px 15px rgba(74,144,226,0.3);}
+header {
+ text-align:center;
+ background:var(--primary);
+ color:white;
+ padding:25px 20px;
+ border-radius:15px;
+ margin-bottom:20px;
+ box-shadow:0 6px 15px rgba(74,144,226,0.3);
+}
 header h1 {font-size:2.5em; margin-bottom:10px;}
-.controls {display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-bottom:20px;}
-.btn {background:var(--secondary); color:white; border:none; padding:14px 24px; font-size:1.1em; border-radius:25px; cursor:pointer; display:flex; align-items:center; gap:8px; min-width:120px; justify-content:center;}
+.controls {
+ display:flex;
+ justify-content:center;
+ gap:15px;
+ flex-wrap:wrap;
+ margin-bottom:20px;
+}
+.btn {
+ background:var(--secondary);
+ color:white;
+ border:none;
+ padding:14px 24px;
+ font-size:1.1em;
+ border-radius:25px;
+ cursor:pointer;
+ display:flex;
+ align-items:center;
+ gap:8px;
+ min-width:120px;
+ justify-content:center;
+}
 .btn:hover {background:#40a860;}
 .btn.info { background: var(--primary);}
 .btn.example { background: var(--accent);}
 .btn.tasks { background: #ff9e40;}
 .btn.tips { background: #ff6b35;}
-.difficulty {display:flex; justify-content:center; gap:10px; margin:15px 0; flex-wrap:wrap;}
-.difficulty button {background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer;}
+.difficulty {
+ display:flex;
+ justify-content:center;
+ gap:10px;
+ margin:15px 0;
+ flex-wrap:wrap;
+}
+.difficulty button {
+ background:var(--primary);
+ color:white;
+ border:none;
+ padding:10px 20px;
+ border-radius:20px;
+ cursor:pointer;
+}
 .difficulty button:hover {background:#3a7bc8;}
 .difficulty button.active {background:var(--secondary); font-weight:bold;}
-.section {background:white; border-radius:15px; padding:25px; margin-bottom:20px; box-shadow:0 4px 15px rgba(0,0,0,0.1); display:none;}
+.section {
+ background:white;
+ border-radius:15px;
+ padding:25px;
+ margin-bottom:20px;
+ box-shadow:0 4px 15px rgba(0,0,0,0.1);
+ display:none;
+}
 .section.active {display:block;}
-.section h2 {color:var(--primary); margin-bottom:15px; font-size:1.6em; border-bottom:3px solid var(--secondary); padding-bottom:8px; display:inline-block;}
-.explanation {background:var(--light); padding:20px; border-radius:12px; border-left:6px solid var(--primary); margin-bottom:20px;}
-.fraction-input {display:flex; justify-content:center; align-items:center; gap:15px; margin:20px 0; flex-wrap:wrap;}
-.fraction {display:flex; flex-direction:column; align-items:center; gap:5px;}
-.fraction input {width:70px; height:50px; font-size:1.4em; text-align:center; border:3px solid var(--primary); border-radius:10px; padding:5px; font-weight:bold; background:#f0f8ff;}
+.section h2 {
+ color:var(--primary);
+ margin-bottom:15px;
+ font-size:1.6em;
+ border-bottom:3px solid var(--secondary);
+ padding-bottom:8px;
+ display:inline-block;
+}
+.explanation {
+ background:var(--light);
+ padding:20px;
+ border-radius:12px;
+ border-left:6px solid var(--primary);
+ margin-bottom:20px;
+}
+.fraction-input {
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ gap:15px;
+ margin:20px 0;
+ flex-wrap:wrap;
+}
+.fraction {
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:5px;
+}
+.fraction input {
+ width:70px;
+ height:50px;
+ font-size:1.4em;
+ text-align:center;
+ border:3px solid var(--primary);
+ border-radius:10px;
+ padding:5px;
+ font-weight:bold;
+ background:#f0f8ff;
+}
 .fraction-line {height:3px; background-color:var(--dark); width:70px; margin:0 auto;}
 .operation {font-size:1.8em; color:var(--primary); font-weight:bold;}
-.feedback {margin-top:15px; padding:12px; border-radius:10px; font-weight:bold; text-align:center; font-size:1.1em; display:none;}
+.feedback {
+ margin-top:15px;
+ padding:12px;
+ border-radius:10px;
+ font-weight:bold;
+ text-align:center;
+ font-size:1.1em;
+ display:none;
+ white-space:pre-line;
+}
 .correct {background-color:#d4edda; color:#155724; border:1px solid #c3e6cb;}
 .incorrect {background-color:#f8d7da; color:#721c24; border:1px solid #f5c6cb;}
-.check-btn, .reset-btn {padding:12px 24px; font-size:1.1em; border-radius:25px; cursor:pointer; font-weight:bold; margin:10px 5px; border:none;}
+.helpbox {
+ margin-top:12px;
+ padding:16px;
+ border-radius:12px;
+ background:#eef7ff;
+ border:1px solid #b3d9ff;
+ display:none;
+ text-align:left;
+}
+.helpbox h4 {
+ color:var(--primary);
+ margin-bottom:10px;
+}
+.helpstep {
+ margin:10px 0;
+}
+.helpmath {
+ margin:8px 0 12px 0;
+ padding-left:8px;
+}
+.check-btn, .reset-btn {
+ padding:12px 24px;
+ font-size:1.1em;
+ border-radius:25px;
+ cursor:pointer;
+ font-weight:bold;
+ margin:10px 5px;
+ border:none;
+}
 .check-btn {background:var(--secondary); color:white;}
 .check-btn:hover {background:#40a860;}
 .reset-btn {background:#e74c3c; color:white;}
 .reset-btn:hover {background:#c0392b;}
-.tips-popup {position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; border:3px solid var(--accent); border-radius:15px; padding:25px; width:80%; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.3); z-index:1000; text-align:center; font-size:1.1em; display:none;}
+.tips-popup {
+ position:fixed;
+ top:50%;
+ left:50%;
+ transform:translate(-50%,-50%);
+ background:white;
+ border:3px solid var(--accent);
+ border-radius:15px;
+ padding:25px;
+ width:80%;
+ max-width:500px;
+ box-shadow:0 10px 30px rgba(0,0,0,0.3);
+ z-index:1000;
+ text-align:center;
+ font-size:1.1em;
+ display:none;
+}
 .tips-popup h3 {color:var(--accent); margin-bottom:15px; font-size:1.4em;}
-.tips-popup ul {padding-left:20px; margin:15px 0;}
+.tips-popup ul {padding-left:20px; margin:15px 0; text-align:left;}
 .tips-popup li {margin-bottom:10px;}
-.tips-popup button {background:var(--secondary); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; margin-top:15px;}
-.overlay {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; display:none;}
-.task {background:#f0f8ff; padding:18px; border-radius:12px; margin-bottom:15px; border:1px solid #b3d9ff; font-size:1.1em;}
+.tips-popup button {
+ background:var(--secondary);
+ color:white;
+ border:none;
+ padding:10px 20px;
+ border-radius:10px;
+ cursor:pointer;
+ margin-top:15px;
+}
+.overlay {
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:rgba(0,0,0,0.5);
+ z-index:999;
+ display:none;
+}
+.task {
+ background:#f0f8ff;
+ padding:18px;
+ border-radius:12px;
+ margin-bottom:15px;
+ border:1px solid #b3d9ff;
+ font-size:1.1em;
+}
 .task h3 {color:var(--primary); margin-bottom:10px;}
 .task .fraction input[readonly] {pointer-events:none; background:#f0f8ff;}
 .task .fraction input:not([readonly]) {pointer-events:auto; background:#f9f9f9;}
 </style>
 </head>
 <body>
-
 <header>
 <h1>🧩 Brüche addieren</h1>
 </header>
@@ -86,7 +258,7 @@ header h1 {font-size:2.5em; margin-bottom:10px;}
 <div id="info" class="section active">
 <h2>Was sind Brüche?</h2>
 <div class="explanation">
-<p>Ein Bruch zeigt einen Teil eines Ganzen an. Zum Beispiel: <strong>1/2</strong> bedeutet: „Ein Teil von zwei gleich großen Teilen“.</p>
+<p>Ein Bruch zeigt einen Teil eines Ganzen an. Zum Beispiel: <strong>\( \frac{1}{2} \)</strong> bedeutet: „Ein Teil von zwei gleich großen Teilen“.</p>
 <p>Beim Addieren von Brüchen musst du zuerst die Nenner (die Zahl unten) gleich machen.</p>
 <p>Wenn die Nenner gleich sind: Addiere einfach die Zähler (oben).</p>
 <p>Wenn die Nenner unterschiedlich sind: Finde den kleinsten gemeinsamen Nenner (kgV) und erweitere die Brüche.</p>
@@ -118,6 +290,7 @@ header h1 {font-size:2.5em; margin-bottom:10px;}
 </div>
 </div>
 <div class="feedback" id="exampleFeedback"></div>
+<div class="helpbox" id="exampleHelp"></div>
 <button class="check-btn" onclick="checkExample()">Prüfen</button>
 <button class="reset-btn" onclick="resetExample()">Neu starten</button>
 </div>
@@ -130,6 +303,7 @@ header h1 {font-size:2.5em; margin-bottom:10px;}
 </div>
 
 <div class="overlay" id="overlay"></div>
+
 <div class="tips-popup" id="tipsPopup">
 <h3>💡 Tipp: Wie man Brüche addiert</h3>
 <ul>
@@ -139,112 +313,300 @@ header h1 {font-size:2.5em; margin-bottom:10px;}
 <li><strong>4. Addieren:</strong> Addiere die Zähler, der Nenner bleibt gleich.</li>
 <li><strong>5. Kürzen:</strong> Kürze das Ergebnis, wenn möglich.</li>
 </ul>
-<p><strong>Beispiel:</strong> 1/4 + 1/2 → kgV = 4 → 1/4 + 2/4 = 3/4</p>
+<p><strong>Beispiel:</strong> \( \frac{1}{4} + \frac{1}{2} \rightarrow \) kgV \( = 4 \rightarrow \frac{1}{4} + \frac{2}{4} = \frac{3}{4} \)</p>
 <button onclick="hideTips()">Schließen</button>
 </div>
 
 <script>
-// Aufgaben
 const tasks = {
-easy: [{num1:1,den1:4,num2:2,den2:4},{num1:1,den1:3,num2:1,den2:3},{num1:2,den1:5,num2:1,den2:5},{num1:3,den1:6,num2:1,den2:6}],
-medium: [{num1:1,den1:3,num2:1,den2:6},{num1:2,den1:5,num2:1,den2:10},{num1:3,den1:4,num2:1,den2:2},{num1:1,den1:4,num2:1,den2:8}],
-hard: [{num1:2,den1:3,num2:1,den2:4},{num1:3,den1:5,num2:2,den2:10},{num1:1,den1:2,num2:2,den2:3},{num1:3,den1:8,num2:1,den2:4}]
+easy: [
+ {num1:1,den1:4,num2:2,den2:4},
+ {num1:1,den1:3,num2:1,den2:3},
+ {num1:2,den1:5,num2:1,den2:5},
+ {num1:3,den1:6,num2:1,den2:6}
+],
+medium: [
+ {num1:1,den1:3,num2:1,den2:6},
+ {num1:2,den1:5,num2:1,den2:10},
+ {num1:3,den1:4,num2:1,den2:2},
+ {num1:1,den1:4,num2:1,den2:8}
+],
+hard: [
+ {num1:2,den1:3,num2:1,den2:4},
+ {num1:3,den1:5,num2:2,den2:10},
+ {num1:1,den1:2,num2:2,den2:3},
+ {num1:3,den1:8,num2:1,den2:4}
+]
 };
 
-// Anzeige Section
-function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active');}
-// Tipps
-function showTips(){document.getElementById('tipsPopup').style.display='block'; document.getElementById('overlay').style.display='block';}
-function hideTips(){document.getElementById('tipsPopup').style.display='none'; document.getElementById('overlay').style.display='none';}
+function showSection(id) {
+ document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ if (window.MathJax && MathJax.typesetPromise) {
+  MathJax.typesetPromise([document.getElementById(id)]);
+ }
+}
 
-// Schwierigkeit
-document.querySelectorAll('.difficulty-btn').forEach(btn=>{
-btn.addEventListener('click', function(){
-document.querySelectorAll('.difficulty-btn').forEach(b=>b.classList.remove('active'));
-this.classList.add('active');
-generateTasks(this.getAttribute('data-level'));
-});
+function showTips() {
+ document.getElementById('tipsPopup').style.display = 'block';
+ document.getElementById('overlay').style.display = 'block';
+ if (window.MathJax && MathJax.typesetPromise) {
+  MathJax.typesetPromise([document.getElementById('tipsPopup')]);
+ }
+}
+
+function hideTips() {
+ document.getElementById('tipsPopup').style.display = 'none';
+ document.getElementById('overlay').style.display = 'none';
+}
+
+document.querySelectorAll('.difficulty-btn').forEach(btn => {
+ btn.addEventListener('click', function() {
+  document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+  this.classList.add('active');
+  generateTasks(this.getAttribute('data-level'));
+ });
 });
 
-// Mathe-Funktionen
 function calculateLCM(a,b){return a*b/gcd(a,b);}
-function gcd(a,b){return b===0?a:gcd(b,a%b);}
-function simplifyFraction(num,den){const d=gcd(num,den); return {numerator:num/d, denominator:den/d};}
-function addFractions(n1,d1,n2,d2){if(d1===d2){return simplifyFraction(n1+n2,d1);} else {const lcm=calculateLCM(d1,d2); const r1=n1*(lcm/d1); const r2=n2*(lcm/d2); return simplifyFraction(r1+r2,lcm);}}
+function gcd(a,b){return b===0 ? a : gcd(b, a%b);}
 
-// Aufgaben generieren
+function simplifyFraction(num,den){
+ if (!Number.isFinite(num) || !Number.isFinite(den) || den === 0) return null;
+ const d = gcd(Math.abs(num), Math.abs(den));
+ return {
+  numerator:num/d,
+  denominator:den/d
+ };
+}
+
+function addFractions(n1,d1,n2,d2){
+ if(d1===d2){
+  return simplifyFraction(n1+n2,d1);
+ } else {
+  const lcm=calculateLCM(d1,d2);
+  const r1=n1*(lcm/d1);
+  const r2=n2*(lcm/d2);
+  return simplifyFraction(r1+r2,lcm);
+ }
+}
+
+function buildHelpSteps(n1,d1,n2,d2){
+ const sameDenominator = d1 === d2;
+ const lcm = sameDenominator ? d1 : calculateLCM(d1,d2);
+ const f1 = lcm / d1;
+ const f2 = lcm / d2;
+ const r1 = n1 * f1;
+ const r2 = n2 * f2;
+ const sum = r1 + r2;
+ const simple = simplifyFraction(sum,lcm);
+
+ let html = '';
+ html += `<h4>💡 Hilfe: Rechne Schritt für Schritt.</h4>`;
+
+ html += `<div class="helpstep">1. Aufgabe:</div>`;
+ html += `<div class="helpmath">\\[
+ \\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}}
+ \\]</div>`;
+
+ if(sameDenominator){
+  html += `<div class="helpstep">2. Gemeinsamer Nenner:</div>`;
+  html += `<div class="helpmath">Die Nenner sind schon gleich: \\(${d1}\\)</div>`;
+
+  html += `<div class="helpstep">3. Erweitern:</div>`;
+  html += `<div class="helpmath">nicht nötig</div>`;
+
+  html += `<div class="helpstep">4. Addieren:</div>`;
+  html += `<div class="helpmath">\\[
+  \\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}} = \\frac{${n1+n2}}{${d1}}
+  \\]</div>`;
+ } else {
+  html += `<div class="helpstep">2. Gemeinsamer Nenner:</div>`;
+  html += `<div class="helpmath">\\[
+  \\mathrm{kgV}(${d1},${d2}) = ${lcm}
+  \\]</div>`;
+
+  html += `<div class="helpstep">3. Erweitern:</div>`;
+  html += `<div class="helpmath">\\[
+  \\frac{${n1}}{${d1}} = \\frac{${n1}\\cdot${f1}}{${d1}\\cdot${f1}} = \\frac{${r1}}{${lcm}}
+  \\]</div>`;
+  html += `<div class="helpmath">\\[
+  \\frac{${n2}}{${d2}} = \\frac{${n2}\\cdot${f2}}{${d2}\\cdot${f2}} = \\frac{${r2}}{${lcm}}
+  \\]</div>`;
+
+  html += `<div class="helpstep">4. Addieren:</div>`;
+  html += `<div class="helpmath">\\[
+  \\frac{${r1}}{${lcm}} + \\frac{${r2}}{${lcm}} = \\frac{${sum}}{${lcm}}
+  \\]</div>`;
+ }
+
+ html += `<div class="helpstep">5. Kürzen:</div>`;
+ if(simple.numerator !== sum || simple.denominator !== lcm){
+  html += `<div class="helpmath">\\[
+  \\frac{${sum}}{${lcm}} = \\frac{${simple.numerator}}{${simple.denominator}}
+  \\]</div>`;
+ } else {
+  html += `<div class="helpmath">nicht nötig</div>`;
+ }
+
+ return html;
+}
+
 function generateTasks(level){
-const container=document.getElementById('task-container');
-container.innerHTML='';
-tasks[level].forEach((task,index)=>{
-const res=addFractions(task.num1,task.den1,task.num2,task.den2);
-const div=document.createElement('div');
-div.className='task';
-div.innerHTML=`
-<h3>Aufgabe ${index+1}:</h3>
-<div class="fraction-input">
-<div class="fraction">
-<input type="number" value="${task.num1}" readonly>
-<div class="fraction-line"></div>
-<input type="number" value="${task.den1}" readonly>
-</div>
-<span class="operation">+</span>
-<div class="fraction">
-<input type="number" value="${task.num2}" readonly>
-<div class="fraction-line"></div>
-<input type="number" value="${task.den2}" readonly>
-</div>
-<span class="operation">=</span>
-<div class="fraction">
-<input type="number" id="taskResNum${index}" placeholder="Zähler">
-<div class="fraction-line"></div>
-<input type="number" id="taskResDen${index}" placeholder="Nenner">
-</div>
-</div>
-<div class="feedback" id="taskFeedback${index}"></div>
-<button class="check-btn" onclick="checkTask(${index},${res.numerator},${res.denominator})">Prüfen</button>
-<button class="reset-btn" onclick="resetTask(${index})">Neu</button>
-`;
-container.appendChild(div);
-});
+ const container=document.getElementById('task-container');
+ container.innerHTML='';
+ tasks[level].forEach((task,index)=>{
+  const res=addFractions(task.num1,task.den1,task.num2,task.den2);
+  const div=document.createElement('div');
+  div.className='task';
+  div.innerHTML=`
+   <h3>Aufgabe ${index+1}:</h3>
+   <div class="fraction-input">
+    <div class="fraction">
+     <input type="number" value="${task.num1}" readonly>
+     <div class="fraction-line"></div>
+     <input type="number" value="${task.den1}" readonly>
+    </div>
+    <span class="operation">+</span>
+    <div class="fraction">
+     <input type="number" value="${task.num2}" readonly>
+     <div class="fraction-line"></div>
+     <input type="number" value="${task.den2}" readonly>
+    </div>
+    <span class="operation">=</span>
+    <div class="fraction">
+     <input type="number" id="taskResNum${index}" placeholder="Zähler">
+     <div class="fraction-line"></div>
+     <input type="number" id="taskResDen${index}" placeholder="Nenner">
+    </div>
+   </div>
+   <div class="feedback" id="taskFeedback${index}"></div>
+   <div class="helpbox" id="taskHelp${index}"></div>
+   <button class="check-btn" onclick="checkTask(${index},${res.numerator},${res.denominator})">Prüfen</button>
+   <button class="reset-btn" onclick="resetTask(${index})">Neu</button>
+  `;
+  container.appendChild(div);
+ });
 }
 
-// Prüfen
 function checkTask(idx,corrNum,corrDen){
-const userNum=parseInt(document.getElementById(`taskResNum${idx}`).value);
-const userDen=parseInt(document.getElementById(`taskResDen${idx}`).value);
-const fb=document.getElementById(`taskFeedback${idx}`);
-fb.style.display='block';
-const userS=simplifyFraction(userNum,userDen);
-const corrS=simplifyFraction(corrNum,corrDen);
-if(userS.numerator===corrS.numerator && userS.denominator===corrS.denominator){fb.className='feedback correct'; fb.textContent='🎉 Richtig! Super gemacht!';} 
-else{fb.className='feedback incorrect'; fb.textContent=`Falsch! Richtig: ${corrNum}/${corrDen}`;}
+ const userNum=parseInt(document.getElementById(`taskResNum${idx}`).value);
+ const userDen=parseInt(document.getElementById(`taskResDen${idx}`).value);
+ const fb=document.getElementById(`taskFeedback${idx}`);
+ const help=document.getElementById(`taskHelp${idx}`);
+ fb.style.display='block';
+
+ const userS=simplifyFraction(userNum,userDen);
+ const corrS=simplifyFraction(corrNum,corrDen);
+
+ if(!userS){
+  fb.className='feedback incorrect';
+  fb.textContent='Bitte gib einen gültigen Zähler und Nenner ein.';
+  help.style.display='none';
+  return;
+ }
+
+ if(userS.numerator===corrS.numerator && userS.denominator===corrS.denominator){
+  fb.className='feedback correct';
+  fb.textContent='🎉 Richtig! Super gemacht!';
+  help.style.display='none';
+ } else {
+  fb.className='feedback incorrect';
+  fb.textContent='Noch nicht richtig. Schau dir die Hilfe mit den Zwischenschritten an.';
+  const level = document.querySelector('.difficulty-btn.active').getAttribute('data-level');
+  const task = tasks[level][idx];
+  help.innerHTML = buildHelpSteps(task.num1,task.den1,task.num2,task.den2);
+  help.style.display='block';
+  if (window.MathJax && MathJax.typesetPromise) {
+   MathJax.typesetPromise([help]);
+  }
+ }
 }
 
-function resetTask(idx){document.getElementById(`taskResNum${idx}`).value=''; document.getElementById(`taskResDen${idx}`).value=''; document.getElementById(`taskFeedback${idx}`).style.display='none';}
+function resetTask(idx){
+ const level = document.querySelector('.difficulty-btn.active').getAttribute('data-level');
+ const task = tasks[level][Math.floor(Math.random() * tasks[level].length)];
+ const container = document.querySelectorAll('.task')[idx];
+ const res = addFractions(task.num1,task.den1,task.num2,task.den2);
 
-// Beispiel-Aufgabe
+ container.innerHTML = `
+  <h3>Aufgabe ${idx+1}:</h3>
+  <div class="fraction-input">
+   <div class="fraction">
+    <input type="number" value="${task.num1}" readonly>
+    <div class="fraction-line"></div>
+    <input type="number" value="${task.den1}" readonly>
+   </div>
+   <span class="operation">+</span>
+   <div class="fraction">
+    <input type="number" value="${task.num2}" readonly>
+    <div class="fraction-line"></div>
+    <input type="number" value="${task.den2}" readonly>
+   </div>
+   <span class="operation">=</span>
+   <div class="fraction">
+    <input type="number" id="taskResNum${idx}" placeholder="Zähler">
+    <div class="fraction-line"></div>
+    <input type="number" id="taskResDen${idx}" placeholder="Nenner">
+   </div>
+  </div>
+  <div class="feedback" id="taskFeedback${idx}"></div>
+  <div class="helpbox" id="taskHelp${idx}"></div>
+  <button class="check-btn" onclick="checkTask(${idx},${res.numerator},${res.denominator})">Prüfen</button>
+  <button class="reset-btn" onclick="resetTask(${idx})">Neu</button>
+ `;
+}
+
 function checkExample(){
-const n1=parseInt(document.getElementById('exampleNum1').value);
-const d1=parseInt(document.getElementById('exampleDen1').value);
-const n2=parseInt(document.getElementById('exampleNum2').value);
-const d2=parseInt(document.getElementById('exampleDen2').value);
-const res=addFractions(n1,d1,n2,d2);
-const uNum=parseInt(document.getElementById('exampleResNum').value);
-const uDen=parseInt(document.getElementById('exampleResDen').value);
-const fb=document.getElementById('exampleFeedback'); fb.style.display='block';
-const uS=simplifyFraction(uNum,uDen);
-const rS=simplifyFraction(res.numerator,res.denominator);
-if(uS.numerator===rS.numerator && uS.denominator===rS.denominator){fb.className='feedback correct'; fb.textContent='🎉 Richtig! Super gemacht!';} 
-else{fb.className='feedback incorrect'; fb.textContent=`Falsch! Richtig: ${res.numerator}/${res.denominator}`;}
+ const n1=parseInt(document.getElementById('exampleNum1').value);
+ const d1=parseInt(document.getElementById('exampleDen1').value);
+ const n2=parseInt(document.getElementById('exampleNum2').value);
+ const d2=parseInt(document.getElementById('exampleDen2').value);
+ const uNum=parseInt(document.getElementById('exampleResNum').value);
+ const uDen=parseInt(document.getElementById('exampleResDen').value);
+ const fb=document.getElementById('exampleFeedback');
+ const help=document.getElementById('exampleHelp');
+ fb.style.display='block';
+
+ if ([n1,d1,n2,d2,uNum,uDen].some(v => isNaN(v)) || d1 === 0 || d2 === 0 || uDen === 0) {
+  fb.className='feedback incorrect';
+  fb.textContent='Bitte fülle alle Felder richtig aus. Nenner darf nicht 0 sein.';
+  help.style.display='none';
+  return;
+ }
+
+ const res=addFractions(n1,d1,n2,d2);
+ const uS=simplifyFraction(uNum,uDen);
+ const rS=simplifyFraction(res.numerator,res.denominator);
+
+ if(uS && uS.numerator===rS.numerator && uS.denominator===rS.denominator){
+  fb.className='feedback correct';
+  fb.textContent='🎉 Richtig! Super gemacht!';
+  help.style.display='none';
+ } else {
+  fb.className='feedback incorrect';
+  fb.textContent='Noch nicht richtig. Schau dir die Hilfe mit den Zwischenschritten an.';
+  help.innerHTML = buildHelpSteps(n1,d1,n2,d2);
+  help.style.display='block';
+  if (window.MathJax && MathJax.typesetPromise) {
+   MathJax.typesetPromise([help]);
+  }
+ }
 }
 
 function resetExample(){
-['exampleNum1','exampleDen1','exampleNum2','exampleDen2','exampleResNum','exampleResDen'].forEach(id=>document.getElementById(id).value='');
-document.getElementById('exampleFeedback').style.display='none';
+ ['exampleResNum','exampleResDen']
+ .forEach(id=>document.getElementById(id).value='');
+ document.getElementById('exampleFeedback').style.display='none';
+ document.getElementById('exampleHelp').style.display='none';
 }
 
-document.addEventListener('DOMContentLoaded', function(){generateTasks('easy');});
+document.addEventListener('DOMContentLoaded', function(){
+ generateTasks('easy');
+ if (window.MathJax && MathJax.typesetPromise) {
+  MathJax.typesetPromise();
+ }
+});
 </script>
 </body>
 </html>
